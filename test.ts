@@ -5,7 +5,7 @@ export function test() {
 
   var r = new Renwu()
   
-  var j =r.run(() => { 
+  var j = r.run(() => { 
     console.log('this will run every 2 sec, and stopped at sec 7')
   }, Time.seconds(2))
 
@@ -30,5 +30,9 @@ export function test() {
     console.log('this will run at sec 1')
   }, Time.date(now))
 
+
+  r.run(() => {
+    console.log('this will run every sec for 3 times')
+  }, Time.seconds(1), 3)
 
 }

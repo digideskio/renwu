@@ -46,6 +46,7 @@ export class Renwu {
     var j = setInterval(func, interval)
     this.intervalPool.push(j)
     if(times != undefined){
+      console.log('dsds')
       this.runOnce(() => {
         this.drop(j)
       }, ((interval * times) + 100))
