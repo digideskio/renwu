@@ -51,6 +51,16 @@ export class Renwu {
     return [JobType.Timeout, j]
   }  
 
+  runOn(func: any, date: Date) {
+    if(date.getTime() < new Date().getTime()) {
+      console.error('connot schedule job for the past')
+      return null
+    }
+    var j = setTimeout(func, Time.date(date))
+    this.timeoutPool.push(j)
+    return [JobType.Timeout, j] 
+  }
+
   drop(job: any): void {
     if(job[0] === 1) {
       clearInterval(job[1])
