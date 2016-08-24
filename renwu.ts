@@ -87,23 +87,6 @@ export class Renwu {
   }
 
   /**
-   * drop all scheduled jobs of a type
-   */
-  dropPool(jobType: JobType): void {
-    if(jobType === 1) {
-      for(let intervalId of this.intervalPool) {
-        clearInterval(intervalId)
-      }
-      this.intervalPool = []
-    }else {
-      for(let timeoutId of this.timeoutPool) {
-        clearTimeout(timeoutId)
-      }
-      this.timeoutPool = []
-    }
-  }
-
-  /**
    * drop all scheduled jobs
    */
   dropAll(): void {
