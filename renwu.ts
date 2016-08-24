@@ -39,18 +39,32 @@ export class Renwu {
     this.timeoutPool = []
   }
 
-  run(func: any, time: number): [JobType, any] {
-    var j = setInterval(func, time)
+  /**
+   * run task repeatly with an interval time, optional to set number of repeats 
+   */
+  run(func: any, interval: number, times?: number): [JobType, any] {
+    var j = setInterval(func, interval)
     this.intervalPool.push(j)
+    if(times != undefined){
+      this.runOnce(() => {
+        this.drop(j)
+      }, ((interval * times) + 100))
+    }
     return [JobType.Interval, j]
   }
 
-  runOnce(func: any, time: number): [JobType, any] {
-    var j = setTimeout(func, time)
+  /**
+   * run task once after the delay
+   */
+  runOnce(func: any, delay: number): [JobType, any] {
+    var j = setTimeout(func, delay)
     this.timeoutPool.push(j)
     return [JobType.Timeout, j]
   }  
 
+  /**
+   * run task on a specific date
+   */
   runOn(func: any, date: Date) {
     if(date.getTime() < new Date().getTime()) {
       console.error('connot schedule job for the past')
@@ -61,6 +75,9 @@ export class Renwu {
     return [JobType.Timeout, j] 
   }
 
+  /**
+   * drop a scheduled job
+   */
   drop(job: any): void {
     if(job[0] === 1) {
       clearInterval(job[1])
@@ -69,6 +86,9 @@ export class Renwu {
     }
   }
 
+  /**
+   * drop all scheduled jobs of a type
+   */
   dropPool(jobType: JobType): void {
     if(jobType === 1) {
       for(let intervalId of this.intervalPool) {
@@ -83,6 +103,9 @@ export class Renwu {
     }
   }
 
+  /**
+   * drop all scheduled jobs
+   */
   dropAll(): void {
     for(let intervalId of this.intervalPool) {
       clearInterval(intervalId)
