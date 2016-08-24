@@ -1,0 +1,12 @@
+{
+  "name": "Renwu",
+  "version": "1.0.0",
+  "description": "A javascript module for scheduling tasks to run",
+  "main": "build/test.js",
+  "scripts": {
+    "buid": "",
+    "test": "node -e \"require('./build/test.js').test()\""
+  },
+  "author": "Aaron Zhao",
+  "license": "MIT"
+}
