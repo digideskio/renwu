@@ -59,8 +59,8 @@ export class Renwu {
     }
   }
 
-  dropPool(changeType: JobType): void {
-    if(changeType === 1) {
+  dropPool(jobType: JobType): void {
+    if(jobType === 1) {
       for(let intervalId of this.intervalPool) {
         clearInterval(intervalId)
       }
