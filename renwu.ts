@@ -31,12 +31,8 @@ export module Time {
 
 export class Renwu {
 
-  private intervalPool: any[]
-  private timeoutPool: any[]
-
   constructor() {
-    this.intervalPool = []
-    this.timeoutPool = []
+
   }
 
   /**
@@ -44,7 +40,6 @@ export class Renwu {
    */
   run(func: any, interval: number, times?: number): [JobType, any] {
     var j = setInterval(func, interval)
-    this.intervalPool.push(j)
     if(times != undefined){
       this.runOnce(() => {
         this.drop([JobType.Interval, j])
@@ -58,7 +53,6 @@ export class Renwu {
    */
   runOnce(func: any, delay: number): [JobType, any] {
     var j = setTimeout(func, delay)
-    this.timeoutPool.push(j)
     return [JobType.Timeout, j]
   }  
 
@@ -71,7 +65,6 @@ export class Renwu {
       return null
     }
     var j = setTimeout(func, Time.date(date))
-    this.timeoutPool.push(j)
     return [JobType.Timeout, j] 
   }
 
@@ -84,22 +77,6 @@ export class Renwu {
     }else {
       clearTimeout(job[1])
     }
-  }
-
-  /**
-   * drop all scheduled jobs
-   */
-  dropAll(): void {
-    for(let intervalId of this.intervalPool) {
-      clearInterval(intervalId)
-    }
-    
-    for(let timeoutId of this.timeoutPool) {
-      clearTimeout(timeoutId)
-    }
-
-    this.intervalPool = []
-    this.timeoutPool = []
   }
 
 
