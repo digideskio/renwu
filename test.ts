@@ -4,35 +4,29 @@ import { Renwu, Time } from './renwu'
 export function test() {
 
   var r = new Renwu()
-  
-  var j = r.run(() => { 
-    console.log('this will run every 2 sec, and stopped at sec 7')
+
+  r.run(() => {
+    console.log('task 1: this will run every sec for 3 times')
+  }, Time.seconds(1), 3)
+
+  var j2 = r.run(() => { 
+    console.log('task 2: this will run every 2 sec')
   }, Time.seconds(2))
 
   r.runOnce(() => {
-    r.drop(j)
+    console.log('drop job 2')
+    r.drop(j2)
   }, Time.seconds(7))
 
-  r.runOnce(() => {
-    console.log('this will run at sec 9, and drop all jobs')
-    r.dropAll()
-  }, Time.seconds(9))
-  
-  r.runOnce(() => {
-    console.log('this will not run (killed at sec 9)')
-  }, Time.seconds(10))
 
-
-  var now = new Date()
-  now.setSeconds(now.getSeconds() + 1)
-
-  r.runOnce(() => {
-    console.log('this will run at sec 1')
-  }, Time.date(now))
-
-
-  r.run(() => {
-    console.log('this will run every sec for 3 times')
-  }, Time.seconds(1), 3)
+  var delayMax = 0
+  var j3 = r.runOnChange(() => {  //task 
+    console.log('this will run after delay of 2 sec and increment of 1 sec in delay after each cycle')
+  }, Time.seconds(2), (delay: number) => {  //return next task delay time
+    delayMax = delay + Time.seconds(1)
+    return delay + Time.seconds(1)
+  }, () => {  //stop condition: when next delay is more than 5 seconds
+    return delayMax > Time.seconds(5)
+  })
 
 }

@@ -69,6 +69,22 @@ export class Renwu {
   }
 
   /**
+   * run task repeatly with change to the delay every cycle via the change(delay) function
+   * and stop when stop() return true
+   */
+  runOnChange(func: any, delay: number, change: (delay: number) => number, stop: () => boolean): [JobType, any] {
+    var j = setTimeout(() => { 
+      func()
+      if(!stop()){
+        this.runOnChange(func, change(delay), change, stop)
+      }else{
+        clearTimeout(j)
+      }
+    }, delay)
+    return [JobType.Timeout, j]
+  }  
+
+  /**
    * drop a scheduled job
    */
   drop(job: any): void {
